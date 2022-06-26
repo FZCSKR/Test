@@ -1,0 +1,107 @@
+public class Test {
+
+    /*
+    Object类中常用的方法
+        1.hashCode()方法:  public int hashCode()
+        返回该对象的哈希码值。默认情况下，该方法会根据对象的地址来计算.
+        不同对象的，hashCode()一般来说不会相同. 但是，同一个对象的hashCode()值肯定相同.
+        不是对象的实际地址值，可以理解为逻辑地址值.
+        支持此方法是为了提高哈希表（例如 java.util.Hashtable 提供的哈希表）的性能
+
+        2.getClass()方法:  public final Class getClass()
+            返回此 Object 的运行时类,即返回该类的字节码文件对象
+            (Object.java文件编译生成Object.class字节码文件,当  .class文件加载进内存，按照Java万物皆对象的思想，他会把.class文件看做一个对象，他就会创建 .class 文件对象)
+
+            可以通过Class类中的一个方法，获取对象的真实类的全名称。public String getName()
+            用Class 类型来描述 字节码文件对象。getClass()要做的就是把这个 .class 文件对应的那个对象获取出来。(字节码文件加载进内存只有一次也就只会创建一个对应的对象)
+
+        3.clone()方法:   protected Object clone ()
+            clone 的步骤:
+            Object类的clone ()方法，权限修饰符是受保护的，可能在外界无法直接调用.就可以重写 clone ()方法 把权限修饰符改为public 但是克隆的逻辑还是继续调用父类的，super.clone();
+            需要你这个类实现一个标记接口 Cloneable，不重写，克隆默认就不支持。
+            Cloneable 他里面没有任何抽象方法，这种接口，我们称为为标记接口，意思就是给这个类打个标记，想让虚拟机知道要进行克隆的操作。
+        4.equals()方法
+            指示其他某个对象是否与此对象“相等”。默认情况下比较的是对象的引用(地址值)是否相同。
+        5.指示其他某个对象是否与此对象“相等”。默认情况下比较的是对象的引用(地址值)是否相同。
+     */
+
+    /*
+        数组：
+        数组就是相同数据类型元素的集合。在内存中是一段连续的空间。在会使用到很多相同数据类型的变量时，使用数组可以更加方便，减少程序的代码量。
+        数组支持随机访问，即通过下标访问快速访问数组中任意位置的元素。
+        Java数组的下表依旧是从0开始，介于[0, N）之间不包含N，N为元素个数，不能越界，否则会报出下标越界异常。
+        1.for循环遍历
+        通常遍历数组都是使用for循环来实现。遍历一维数组很简单，遍历二维数组需要使用双层for循环，通过数组的length属性可获得数组的长度。
+        foreach语句遍历
+        java5之后，Java提供了一种更简洁的循环：foreach循环，这种循环遍历数组和集合更加简洁。使用foreach循环遍历数组时，无须获得数组和集合长度，无须根据索引来访问数组元素，foreach循环自动遍历数组和集合的每一个元素。
+     */
+    public static void main(String[] args) throws CloneNotSupportedException{
+        //1.
+        Object obj = new Object();
+        System.out.println(obj);           //java.lang.Object@12a3a380
+        int hashCode = obj.hashCode();     //312714112
+        System.out.println(hashCode);
+
+        //一般情况下，不同的对象他的hashCode值也不一样
+        Object obj2 = new Object();
+        System.out.println(obj2);          //java.lang.Object@29453f44
+        int hashCode1 = obj2.hashCode();
+        System.out.println(hashCode1);     //692404036
+
+        //2.
+        Object ob= new Object();
+        System.out.println(ob);
+        Class<?> aClass = ob.getClass(); //Object.class----对应的那个对象，获取出来
+
+        Object ob2 = new Object();
+        System.out.println(obj2);
+        Class<?> aClass1 = obj2.getClass();
+
+        System.out.println(ob == obj2); //false(两个对象的地址值不同)
+        System.out.println(aClass == aClass1); //true(两个对象的字节码文件一样,所对应的字节码文件对象也就只有一个)
+
+        //3.
+        Dog dog = new Dog();
+        dog.name = "小白";
+        dog.age = 3;
+        System.out.println(dog);
+
+        //把上面的dog对象克隆一份
+        Dog cloneDog = (Dog) dog.clone();
+        System.out.println(cloneDog);
+
+        /*数组遍历*/
+        int [] arr={1,2,3,4,5};
+        for(int a:arr) {
+            a = 0;
+            System.out.print(a);
+        }
+    }
+
+    }
+
+
+
+}
+
+//Dog类实现接口Cloneable
+class Dog implements Cloneable {
+    public String name;
+    public int age;
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+
+    //重写 clone ()方法
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        //你的重写逻辑，还是调用父类的克隆逻辑
+        return super.clone();
+    }
+}
+
